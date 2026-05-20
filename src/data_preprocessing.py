@@ -10,6 +10,10 @@ nltk.download('stopwords')
 
 stop_words = set(stopwords.words('english'))
 
+# Keep important negation words
+stop_words.discard("not")
+stop_words.discard("no")
+stop_words.discard("never")
 
 
 RAW_PATH = "data/raw/Dataset-SA.csv"
