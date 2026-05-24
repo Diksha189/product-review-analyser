@@ -2,72 +2,149 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Product Review Analyser</title>
 
-    <!-- Tailwind -->
+    <title>Product Review Analyzer</title>
+
+    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body{
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .glass-card{
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        textarea{
+            resize: none;
+        }
+
+        .chart-box{
+            transition: 0.3s ease;
+        }
+
+        .chart-box:hover{
+            transform: translateY(-5px);
+        }
+
+        .main-btn{
+            transition: 0.3s ease;
+        }
+
+        .main-btn:hover{
+            transform: scale(1.02);
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 min-h-screen p-6">
+<body class="bg-gradient-to-br from-black via-indigo-900 to-purple-900 min-h-screen p-6">
 
-<div class="max-w-6xl mx-auto bg-white/90 p-6 rounded-3xl shadow-2xl">
+<div class="max-w-7xl mx-auto glass-card rounded-3xl shadow-2xl p-8">
 
-    <!-- TITLE -->
-    <h1 class="text-3xl font-bold text-center mb-6">
-        📊 Product Review Analyser
-    </h1>
+    <!-- HEADER -->
+    <div class="text-center mb-10">
 
-    <!-- INPUT -->
-    <form method="POST" action="/predict" class="mb-6">
-        <textarea name="review"
-            class="w-full p-4 border rounded-xl mb-4"
-            placeholder="Write your product review..."></textarea>
+        <h1 class="text-5xl font-bold text-white mb-4 tracking-wide">
+            📊 Product Review Analyzer
+        </h1>
 
-        <button class="w-full bg-blue-600 text-white py-3 rounded-xl">
+        <p class="text-gray-200 text-lg">
+            Analyze customer reviews using AI-powered sentiment analysis
+        </p>
+
+    </div>
+
+    <!-- INPUT SECTION -->
+    <form method="POST" action="/predict" class="mb-10">
+
+        <label class="text-white text-lg font-medium">
+            Enter Product Review
+        </label>
+
+        <textarea
+            name="review"
+            rows="6"
+            class="w-full mt-3 p-5 rounded-2xl bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none focus:ring-4 focus:ring-cyan-400 shadow-lg"
+            placeholder="Write your product review here..."
+        ></textarea>
+
+        <button class="main-btn mt-6 w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-cyan-500/50">
             Analyze Sentiment
         </button>
+
     </form>
 
     <!-- RESULT -->
     {% if prediction %}
-    <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold">
+    <div class="text-center mb-10">
+
+        <h2 class="text-4xl font-bold text-white mb-2">
             {{ prediction }} {{ emoji }}
         </h2>
+
+        <p class="text-gray-200">
+            AI has analyzed the sentiment of your review.
+        </p>
+
     </div>
 
-    <!-- ✅ CENTERED PREDICTION CHART -->
-    <div class="flex justify-center mt-6">
-        <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center w-full max-w-md">
-            <h3 class="text-center font-semibold mb-4">Prediction Chart</h3>
-            <div class="w-64 h-64">
+    <!-- Prediction Chart -->
+    <div class="flex justify-center">
+
+        <div class="chart-box bg-white/20 backdrop-blur-lg p-8 rounded-3xl shadow-2xl w-full max-w-md">
+
+            <h3 class="text-center text-white text-2xl font-semibold mb-6">
+                Prediction Chart
+            </h3>
+
+            <div class="w-72 h-72 mx-auto">
                 <canvas id="resultChart"></canvas>
             </div>
+
         </div>
+
     </div>
     {% endif %}
 
-    <!-- ✅ DATASET + BAR (CENTERED ROW) -->
+    <!-- DATASET + BAR CHART -->
     {% if dataset_chart %}
-    <div class="flex flex-wrap justify-center gap-6 mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-14">
 
         <!-- Dataset Pie -->
-        <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center w-full max-w-md">
-            <h3 class="text-center font-semibold mb-4">Dataset Distribution</h3>
-            <div class="w-64 h-64">
+        <div class="chart-box bg-white/20 backdrop-blur-lg p-8 rounded-3xl shadow-2xl">
+
+            <h3 class="text-center text-white text-2xl font-semibold mb-6">
+                Dataset Distribution
+            </h3>
+
+            <div class="w-72 h-72 mx-auto">
                 <canvas id="datasetChart"></canvas>
             </div>
+
         </div>
 
         <!-- Bar Chart -->
-        <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center w-full max-w-md">
-            <h3 class="text-center font-semibold mb-4">Sentiment Comparison</h3>
-            <div class="w-80 h-64">
+        <div class="chart-box bg-white/20 backdrop-blur-lg p-8 rounded-3xl shadow-2xl">
+
+            <h3 class="text-center text-white text-2xl font-semibold mb-6">
+                Sentiment Comparison
+            </h3>
+
+            <div class="w-full h-72">
                 <canvas id="barChart"></canvas>
             </div>
+
         </div>
 
     </div>
@@ -85,65 +162,144 @@
 </script>
 
 <script>
+
 const resultData = JSON.parse(document.getElementById("result-data").textContent);
 const datasetData = JSON.parse(document.getElementById("dataset-data").textContent);
 
 // Prediction Chart
 if(resultData){
+
     new Chart(document.getElementById("resultChart"), {
+
         type: "doughnut",
+
         data: {
             labels: ["Positive", "Negative", "Neutral"],
+
             datasets: [{
                 data: resultData,
-                backgroundColor: ["#22c55e", "#ef4444", "#facc15"]
+
+                backgroundColor: [
+                    "#22c55e",
+                    "#ef4444",
+                    "#facc15"
+                ],
+
+                borderWidth: 2
             }]
         },
+
         options: {
+
             responsive: true,
             maintainAspectRatio: false,
+
             plugins: {
-                legend: { position: "bottom" }
+
+                legend: {
+                    labels:{
+                        color:"white",
+                        font:{
+                            size:14
+                        }
+                    },
+                    position:"bottom"
+                }
             }
         }
     });
 }
 
-// Dataset + Bar
+// Dataset Chart
 if(datasetData){
+
     new Chart(document.getElementById("datasetChart"), {
+
         type: "pie",
+
         data: {
             labels: ["Positive", "Negative", "Neutral"],
+
             datasets: [{
                 data: datasetData,
-                backgroundColor: ["#22c55e", "#ef4444", "#facc15"]
+
+                backgroundColor: [
+                    "#22c55e",
+                    "#ef4444",
+                    "#facc15"
+                ]
             }]
         },
+
         options: {
+
             plugins: {
-                legend: { position: "bottom" }
+
+                legend: {
+
+                    labels:{
+                        color:"white"
+                    },
+
+                    position:"bottom"
+                }
             }
         }
     });
 
+    // Bar Chart
     new Chart(document.getElementById("barChart"), {
+
         type: "bar",
+
         data: {
+
             labels: ["Positive", "Negative", "Neutral"],
+
             datasets: [{
-                label: "Count",
+                label: "Reviews Count",
+
                 data: datasetData,
-                backgroundColor: ["#22c55e", "#ef4444", "#facc15"]
+
+                backgroundColor: [
+                    "#22c55e",
+                    "#ef4444",
+                    "#facc15"
+                ],
+
+                borderRadius: 10
             }]
         },
+
         options: {
+
+            scales: {
+
+                x: {
+                    ticks:{
+                        color:"white"
+                    }
+                },
+
+                y: {
+                    ticks:{
+                        color:"white"
+                    }
+                }
+            },
+
             plugins: {
-                legend: { display: false }
+
+                legend: {
+                    labels:{
+                        color:"white"
+                    }
+                }
             }
         }
     });
 }
+
 </script>
 
 </body>
